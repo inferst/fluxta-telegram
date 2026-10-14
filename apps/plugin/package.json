@@ -1,18 +1,21 @@
 {
   "dependencies": {
-    "@fluxta/sdk": "catalog:"
+    "@fluxta/sdk": "catalog:",
+    "telegram-protocol": "workspace:*"
   },
   "devDependencies": {
-    "telegram-editor": "workspace:*",
     "@types/node": "catalog:",
+    "telegram-editor": "workspace:*",
     "tsdown": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "name": "telegram-plugin",
   "private": true,
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
+    "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "type": "module",
