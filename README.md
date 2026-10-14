@@ -1,38 +1,50 @@
-# Telegram
+# Fluxta Telegram
 
-A Fluxta plugin scaffolded with `fluxta create`.
+A [Fluxta](https://fluxta.app) plugin that posts to Telegram channels, groups
+and chats through your own bots — for example, to announce a stream when it
+goes live.
 
-## Commands
+## Setting up a Chat
 
-- `pnpm install` — install dependencies
-- `pnpm typecheck` — type-check the Plugin sidecar and Action Editor
-- `pnpm lint` — lint both apps with ESLint
-- `pnpm format` / `pnpm format:check` — format (or check formatting of) the whole package with Prettier
-- `pnpm build` — build the plugin into `dist/telegram/`
-- `pnpm dev` — watch both apps; successful Plugin sidecar builds run `fluxta restart`
-- `fluxta validate` — validate the existing build output
+1. Create a bot with [@BotFather](https://t.me/BotFather) and copy its token.
+2. Add the bot to the channel as an admin with **Post messages** (to a group,
+   as a member is enough).
+3. In Fluxta, open the Telegram plugin's settings and **Add Chat**: a name,
+   the channel as `@username` or its `t.me` link (a private channel's numeric
+   id, such as `-1001234567890`, works too), and the bot token.
 
-`fluxta restart` refreshes the Development Link and asks Fluxta to restart
-the Plugin process; it does not build the package.
+Each Chat is checked right away: the badge says **Ready** once the bot can
+post there, or what to fix if it cannot. **Check** asks Telegram again. The
+token is stored in the plugin's settings and never shown again — leave the
+field blank when editing to keep it.
 
-## Before publishing
+## Actions
 
-`fluxta publish` fills in `maintainers` and `repository` on its own, from
-your GitHub login and the package's `origin` remote. `author` (and
-`homepage`, if you'd rather set it by hand instead of relying on
-`repository`) still need a real value in `manifest.json` before `fluxta
-validate` passes in strict publishable mode.
+| Action           | What it does                                                                                                                                                                                         |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Send Message** | Posts plain text to a Chat. Produces the message's **Message ID** and its **Message Text**, so a later step can use them — or keep the id in a Global Variable to edit the message from another run. |
 
-`fluxta publish` also runs `lint` and `format:check` itself before it
-authenticates or touches GitHub, and stops if either fails — fix them (or
-run `pnpm lint`/`pnpm format` yourself first) and retry.
+The text can contain Run Variables (`{{…}}`) from earlier steps and the Event
+that fired. It is sent as plain text, so whatever they hold arrives as
+written.
 
-## Releasing on GitHub
+## Development
+
+```bash
+pnpm install
+pnpm build        # builds dist/telegram/ and restarts the plugin in a running Fluxta
+pnpm dev          # rebuild on change
+pnpm test
+pnpm lint && pnpm format:check
+```
+
+See [`AGENTS.md`](./AGENTS.md) for how the package is put together, and
+Fluxta's [plugin docs](https://fluxta.app/docs/plugins) for the Plugin API.
+
+## Releasing
 
 `.github/workflows/release.yml` watches `manifest.json` on `main`. Push a
-commit that bumps its `version` field, and — once the `v<version>` tag it
-computes doesn't already exist — the workflow builds the plugin, packages it
-with `fluxta package` (the same publishable validation as running it
-locally), tags the commit, and opens a **draft** GitHub Release with the
-packaged zip attached. Review the generated release notes and publish the
-release by hand from the repository's Releases page.
+commit that bumps its `version`, and — once the `v<version>` tag doesn't
+already exist — the workflow builds the plugin, packages it with
+`fluxta package`, tags the commit, and opens a **draft** GitHub Release with
+the zip attached. Publishing to Fluxta's catalog is `pnpm exec fluxta publish`.
