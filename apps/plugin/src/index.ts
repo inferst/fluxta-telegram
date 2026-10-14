@@ -7,6 +7,7 @@ import {
   type PluginMessage,
 } from "telegram-protocol";
 
+import { EditMessageAction } from "./actions/edit-message";
 import { SendMessageAction } from "./actions/send-message";
 import { ChatsService } from "./chats/service";
 import { ChatsStore, type StoredSettings } from "./chats/store";
@@ -18,6 +19,7 @@ const store = new ChatsStore(plugin);
 const chats = new ChatsService(api, () => publish());
 
 plugin.registerAction(new SendMessageAction(store, api));
+plugin.registerAction(new EditMessageAction(store, api));
 
 /**
  * Tells every open editor how the Chats stand, and Fluxta which of them can

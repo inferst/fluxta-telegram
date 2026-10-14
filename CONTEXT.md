@@ -51,11 +51,14 @@ _Avoid_: key, password, API key.
 ### Messages
 
 **Message**:
-What Send Message posts to a Chat: plain text, without Telegram's HTML or
-Markdown — the host substitutes Run Variables into the text before the plugin
-sees it, so markup could be broken by any substituted value. Identified by its
-message id, which is unique only within its chat: editing a Message names both
-the Chat and the id. Send Message produces the id and the text as sent;
-keeping the id in a Global Variable is how a later run edits the Message.
+What Send Message posts to a Chat and Edit Message rewrites: plain text,
+without Telegram's HTML or Markdown — the host substitutes Run Variables into
+the text before the plugin sees it, so markup could be broken by any
+substituted value. Identified by its message id, which is unique only within
+its chat: editing a Message names both the Chat and the id. Send Message
+produces the id and the text as sent; keeping the id in a Global Variable is
+how a later run edits the Message. Edit Message replaces the whole text: the
+Bot API cannot read a Message back, so the plugin never knows what it says now
+and cannot append to it.
 _Avoid_: post (a Message in a channel is often called one; the plugin says
 Message), update.

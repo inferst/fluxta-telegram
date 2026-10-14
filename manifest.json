@@ -35,6 +35,13 @@
           "type": "string"
         }
       ]
+    },
+    {
+      "name": "Edit Message",
+      "type": "edit-message",
+      "icon": "icons/square-pen.svg",
+      "context": "standalone",
+      "editor": "editor/edit-message.html"
     }
   ]
 }
